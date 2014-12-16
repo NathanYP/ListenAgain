@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html>
+<html ng-app="pocket">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,10 +8,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Pocket</title>
+    <title>工具箱</title>
     <link rel="stylesheet" href="{{ static_url('vendor/bootstrap/dist/css/bootstrap.css') }}" />
     <link rel="stylesheet" href="{{ static_url('vendor/font-awesome/css/font-awesome.css') }}" />
-    <link rel="stylesheet" href="{{ static_url('main.css') }}" />
+    <link rel="stylesheet" href="{{ static_url('css/main.css') }}" />
   </head>
 
   <body>
@@ -19,11 +19,29 @@
     <div id="wrapper">
 
       <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+          <li class="sidebar-brand">
+            <a href="#/">工具箱</a>
+          </li>
+
+          <li>
+            <a href="#/tingxie">听写</a>
+          </li>
+
+          <li>
+            <a href="#/yuedu">阅读</a>
+          </li>
+
+                              <li>
+            <a href="#/danci">单词</a>
+          </li>
+        </ul>
       </div>
 
       <div id="page-content-wrapper">
-        123
+        <div class="container-fluid" nv-view></div>
       </div>
+      
     </div>
 
     <script src="{{ static_url('vendor/jquery/dist/jquery.js') }}"></script>
@@ -32,6 +50,6 @@
     <script src="{{ static_url('vendor/angular/angular.js') }}"></script>
     <script src="{{ static_url('vendor/angular-route/angular-route.js') }}"></script>
 
-    <script src="{{ static_url('main.js') }}"></script>
+    <script src="{{ static_url('js/main.js') }}"></script>
   </body>
 </html>
