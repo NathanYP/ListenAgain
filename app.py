@@ -16,10 +16,12 @@ class Application(tornado.web.Application):
   def __init__(self):
     handlers = [
       (r'/', HomeHandler),
+      (r'/file', FileHandler),
     ]
     settings = dict(
       template_path = os.path.join(os.path.dirname(__file__), 'templates'),
       static_path = os.path.join(os.path.dirname(__file__), 'static'),
+      debug = True,
     )
     tornado.web.Application.__init__(self, handlers, **settings)
 
@@ -27,6 +29,17 @@ class Application(tornado.web.Application):
 class HomeHandler(tornado.web.RequestHandler):
   def get(self):
     self.render('home.html')
+
+class FileHandler(tornado.web.RequestHandler):
+  def get(self):
+    filename = os.path.join(os.path.dirname('__file__'), 'data', self.get_argument('name'))
+    with open(filename, 'rb') as f:
+      while True:
+        data = f.read(16384)
+        if not data:
+          break
+        self.write(data)
+    self.finish()
 
 
 if __name__ == '__main__':

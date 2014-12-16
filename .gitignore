@@ -56,3 +56,6 @@ target/
 # Bower
 .bowerrc
 static/vendor
+
+# Binary audio files
+data
