@@ -1,6 +1,6 @@
 "use strict";
 
-var app = angular.module('pocket', ['ngRoute'])
+angular.module('pocket', ['ngRoute'])
 
   .controller('TingxieCtrl', function($scope) {
 
@@ -9,15 +9,15 @@ var app = angular.module('pocket', ['ngRoute'])
   .config(function($routeProvider, $locationProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: '../partials/home.html'
+        templateUrl: '/static/partials/home.html'
       })
       .when('/tingxie', {
-        templateUrl: '../partials/tingxie-index.html',
-        controller: 'TingliCtrl'
+        templateUrl: '/static/partials/tingxie-index.html',
+        controller: 'TingxieCtrl'
       })
       .otherwise({ redirectTo: '/'});
 
-      $locationProvider.html5Mode(true);
+      // $locationProvider.html5Mode(true);
   });
 
 // $(document).ready(function() {
@@ -30,3 +30,5 @@ var app = angular.module('pocket', ['ngRoute'])
 //   });
 
 // });
+
+console.log('loaded');
