@@ -25,7 +25,7 @@ cursor = db.cursor()
 def create_db_table():
   cursor.execute(''' 
     create table if not exists audio_files ( 
-      id integer primary key, category  varchar(255), title varchar(255), 
+      id integer primary key autoincrement,  category  varchar(255), title varchar(255), 
       filename varchar(255), page_link text, transcript text)
   ''')
   db.commit()
@@ -38,8 +38,14 @@ def has_downloaded(page_link):
 
 def insert_into(category, filename, page_link, transcript):
   cursor.execute('''INSERT INTO audio_files (category, title, filename, page_link, transcript) 
-                    VALUES (NULL, ?, ?, ?, ?)''', (category, filename, page_link, transcript))
+                    VALUES (?, ?, ?, ?, ?)''', (category, os.path.splitext(filename)[0], filename, page_link, transcript))
   db.commit()
+
+def print_db():
+  cursor.execute('SELECT * FROM audio_files ORDER BY id')
+  rows = cursor.fetchall()
+  for row in rows:
+    print(rows)
 
 # crawler
 def get_soup(url):
@@ -64,7 +70,7 @@ def collect_index_pages():
       pages.add('http://www.elllo.org/english/' + item['href'])
     break
 
-  return pages
+  return sorted(pages)
 
 
 def parse_and_download(page):
@@ -128,8 +134,12 @@ def main():
         print(e)
         print("\n")
 
-    if index >= 5:
+    if index >= 10:
       break
+
+  # print_db()
+  
+  db.close()
 
 
 if __name__ == '__main__':

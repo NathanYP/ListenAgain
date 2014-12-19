@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os.path
+import sqlite3
+import json
 
 import tornado.web
 import tornado.httpserver
@@ -12,18 +14,37 @@ from tornado.options import define, options
 define('port', default=8000, help='run on the given port', type=int)
 define('home', default=os.path.dirname(__file__), help='home directory of profile', type=str)
 
+# db
+def _execute(query):
+  db_path = os.path.join(os.path.dirname(__file__), 'data', 'app.db')
+  db = sqlite3.connect(db_path)
+  cursor = db.cursor()
 
-from urls import url_patterns
+  try:
+    cursor.execute(query)
+    result = cursor.fetchall()
+    db.commit()
+  except Exception:
+    raise
+
+  db.close()
+  return result
 
 
-class Application(tornado.web.Application):
-  def __init__(self):
-    settings = dict(
-      template_path = os.path.join(options.home, 'templates'),
-      static_path = os.path.join(options.home, 'static'),
-      debug = True,
-    )
-    tornado.web.Application.__init__(self, url_patterns, **settings)
+# Controllers
+
+class HomeHandler(tornado.web.RequestHandler):
+  def get(self):
+    self.render('home.html')
+
+
+class EllloHandler(tornado.web.RequestHandler):
+  def get(self):
+    rows = _execute('SELECT * FROM audio_files ORDER BY id')
+    data = []
+    for row in rows:
+      data.append(row)
+    self.write(json.dumps(data))
 
 
 # class FileHandler(tornado.web.RequestHandler):
@@ -36,6 +57,21 @@ class Application(tornado.web.Application):
 #           break
 #         self.write(data)
 #     self.finish()
+
+
+# Main
+class Application(tornado.web.Application):
+  def __init__(self):
+    url_patterns = [
+      (r'/', HomeHandler),
+      (r'/elllo', EllloHandler),
+    ]
+    settings = dict(
+      template_path = os.path.join(options.home, 'templates'),
+      static_path = os.path.join(options.home, 'static'),
+      debug = True,
+    )
+    tornado.web.Application.__init__(self, url_patterns, **settings)
 
 
 def main():
