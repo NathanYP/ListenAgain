@@ -40,10 +40,13 @@ class HomeHandler(tornado.web.RequestHandler):
 
 class EllloHandler(tornado.web.RequestHandler):
   def get(self):
-    rows = _execute('SELECT * FROM audio_files ORDER BY id')
     data = []
+
+    rows = _execute('SELECT id, title, filename, transcript FROM audio_files ORDER BY id')
     for row in rows:
-      data.append(row)
+      _id, _title, _filename, _transcript = row 
+      data.append( {'id': _id, 'title': _title, 'filename': _filename, 'transcript': _transcript} )
+
     self.write(json.dumps(data))
 
 

@@ -2,8 +2,11 @@
 
 angular.module('pocket', ['ngRoute'])
 
-  .controller('TingxieCtrl', function($scope) {
+  .controller('TingxieCtrl', function($scope, $http) {
 
+    $scope.init = function() {
+      $http.get('/elllo').success(function(data) { $scope.list = data; });
+    }
   })
 
   .config(function($routeProvider, $locationProvider) {
